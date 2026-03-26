@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Simón Dice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-brand">
+        <span class="brand-glyph" aria-hidden="true">◈</span>
+        <span class="brand-name">Simón Dice</span>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+        <span class="theme-icon" aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <!-- ── PANTALLA INICIO ──────────────────────────────── -->
+    <main class="screen" id="setupScreen">
+      <div class="setup-inner">
+        <p class="setup-tagline">¿Cuánta memoria tienes?</p>
+
+        <section class="setup-section">
+          <h2 class="section-label">Dificultad</h2>
+          <div class="option-grid" role="group" aria-label="Seleccionar dificultad">
+            <label class="option-card">
+              <input type="radio" name="difficulty" value="easy">
+              <div class="option-card-body">
+                <span class="opt-icon">🌱</span>
+                <span class="opt-name">Fácil</span>
+                <span class="opt-desc">Ritmo pausado</span>
+              </div>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="difficulty" value="normal" checked>
+              <div class="option-card-body">
+                <span class="opt-icon">⚡</span>
+                <span class="opt-name">Normal</span>
+                <span class="opt-desc">Equilibrado</span>
+              </div>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="difficulty" value="hard">
+              <div class="option-card-body">
+                <span class="opt-icon">🔥</span>
+                <span class="opt-name">Difícil</span>
+                <span class="opt-desc">Secuencias rápidas</span>
+              </div>
+            </label>
+          </div>
+        </section>
+
+        <section class="setup-section">
+          <h2 class="section-label">Modo de juego</h2>
+          <div class="option-grid" role="group" aria-label="Seleccionar modo">
+            <label class="option-card">
+              <input type="radio" name="mode" value="classic" checked>
+              <div class="option-card-body">
+                <span class="opt-icon">🎯</span>
+                <span class="opt-name">Clásico</span>
+                <span class="opt-desc">Sin límite de tiempo</span>
+              </div>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="mode" value="timed">
+              <div class="option-card-body">
+                <span class="opt-icon">⏱️</span>
+                <span class="opt-name">Contrarreloj</span>
+                <span class="opt-desc">Tiempo por turno</span>
+              </div>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="mode" value="multiplayer">
+              <div class="option-card-body">
+                <span class="opt-icon">👥</span>
+                <span class="opt-name">2 Jugadores</span>
+                <span class="opt-desc">Por turnos</span>
+              </div>
+            </label>
+          </div>
+        </section>
+
+        <div class="best-strip" id="bestStrip"></div>
+
+        <button class="btn-primary" id="startButton">Iniciar partida</button>
+      </div>
+    </main>
+
+    <!-- ── PANTALLA JUEGO ───────────────────────────────── -->
+    <section class="screen" id="gameScreen" hidden>
+      <div class="game-inner">
+
+        <div class="scoreboard">
+          <div class="score-cell">
+            <span class="score-label">Nivel</span>
+            <span class="score-val" id="levelDisplay">—</span>
+          </div>
+          <div class="score-cell score-cell--player" id="playerCell" hidden>
+            <span class="score-label">Turno</span>
+            <span class="score-val score-val--accent" id="playerDisplay">J1</span>
+          </div>
+          <div class="score-cell">
+            <span class="score-label">Récord</span>
+            <span class="score-val" id="bestDisplay">0</span>
+          </div>
+        </div>
+
+        <!-- Timer (solo contrarreloj) -->
+        <div class="timer-wrap" id="timerWrap" hidden>
+          <div class="timer-track">
+            <div class="timer-fill" id="timerFill"></div>
+          </div>
+          <span class="timer-num" id="timerNum">5</span>
+        </div>
+
+        <!-- Tablero circular -->
+        <div class="simon-board" id="gameBoard" aria-label="Tablero de Simón">
+          <button class="color-btn color-btn--red"    data-color="red"    aria-label="Rojo"></button>
+          <button class="color-btn color-btn--blue"   data-color="blue"   aria-label="Azul"></button>
+          <button class="color-btn color-btn--green"  data-color="green"  aria-label="Verde"></button>
+          <button class="color-btn color-btn--yellow" data-color="yellow" aria-label="Amarillo"></button>
+          <div class="board-hub" aria-hidden="true">
+            <span class="hub-glyph">◈</span>
+          </div>
+        </div>
+
+        <p class="game-msg" id="gameMsg" role="status" aria-live="polite">Observa la secuencia...</p>
+
+        <button class="btn-ghost" id="quitButton">Salir de la partida</button>
+      </div>
+
+      <!-- Modal turno jugador (modo 2 jugadores) -->
+      <div class="ready-overlay" id="readyOverlay" hidden aria-modal="true" role="dialog">
+        <div class="ready-card">
+          <p class="ready-player" id="readyPlayer">Turno de Jugador 1</p>
+          <p class="ready-hint">Pasa el teléfono y pulsa cuando estés listo</p>
+          <button class="btn-primary" id="readyButton">¡Listo!</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PANTALLA FIN DE JUEGO ────────────────────────── -->
+    <section class="screen" id="gameOverScreen" hidden>
+      <div class="gameover-inner">
+
+        <div class="result-card">
+          <div class="result-emoji" id="resultEmoji">🏆</div>
+          <h2 class="result-title" id="resultTitle">¡Fin del juego!</h2>
+          <p class="result-sub" id="resultSub"></p>
+          <div class="result-stats">
+            <div class="stat">
+              <span class="stat-val" id="statLevel">—</span>
+              <span class="stat-label">Nivel</span>
+            </div>
+            <div class="stat stat--new" id="statNew" hidden>
+              <span class="stat-val stat-val--badge">¡Récord!</span>
+              <span class="stat-label">Nuevo</span>
+            </div>
+            <div class="stat">
+              <span class="stat-val" id="statBest">—</span>
+              <span class="stat-label">Récord</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="history-card" id="historyCard"></div>
+
+        <div class="gameover-actions">
+          <button class="btn-primary" id="replayButton">Jugar de nuevo</button>
+          <button class="btn-ghost" id="menuButton">Menú principal</button>
+        </div>
+
+      </div>
+    </section>
+
+  </div><!-- .app -->
+  <script src="script.js"></script>
+</body>
+</html>
