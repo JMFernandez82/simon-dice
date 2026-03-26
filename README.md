@@ -1,5 +1,9 @@
 # Simón Dice
 
+<p align="center">
+  <img src="src/icon-512.png" alt="Simón Dice" width="180">
+</p>
+
 Juego de memoria clásico construido con HTML, CSS y JavaScript vanilla. Sin dependencias ni frameworks.
 
 ## Demo

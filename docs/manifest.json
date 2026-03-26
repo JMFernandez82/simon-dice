@@ -1,0 +1,15 @@
+{
+  "name": "Simón Dice",
+  "short_name": "Simón Dice",
+  "description": "Juego de memoria clásico con modos de dificultad, contrarreloj y 2 jugadores",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#07090f",
+  "theme_color": "#07090f",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "favicon-32.png", "sizes": "32x32",   "type": "image/png" },
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icon-512.png",   "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
